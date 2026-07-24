@@ -43,10 +43,44 @@ const deleteJob = async (id) => {
     });
 };
 
+const findNextPendingJob = async () =>{
+
+    return prisma.job.findFirst({
+        where: {
+            status: "PENDING",
+        },
+        orderBy: [
+             {
+            priority: "desc",
+        },
+        {
+            createdAt: "asc",
+        },
+        ],
+    });
+
+};
+
+const incrementAttempts = async (jobId) => {
+    return prisma.job.update({
+        where: {
+            id: jobId
+        },
+        data: {
+            attempts: {
+                increment: 1
+            },
+        },
+    });
+};
+
+
 module.exports = {
     create,
     findAll,
     findById,
     updateStatus,
-    deleteJob
+    deleteJob,
+    findNextPendingJob,
+    incrementAttempts
 }
