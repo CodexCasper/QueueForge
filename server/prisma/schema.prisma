@@ -4,20 +4,25 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
+enum JobStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  PROCESSING
+}
 
 model Job {
   id          String       @id @default(cuid())
   jobName     String
   payload     Json
-  status      String
+  status      JobStatus    @default(PENDING)
   priority    Int          @default(0)
   attempts    Int          @default(0)
   maxAttempts Int          @default(3)
