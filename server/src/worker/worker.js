@@ -8,20 +8,15 @@ const startWorker = async () => {
 
     while(true){
 
-        const job = await jobsRepository.findNextPendingJob();
+        const processingJob = await jobsRepository.claimNextJob();
     
-       if (!job) {
+       if (!processingJob) {
         console.log("No pending jobs found.");
 
         await sleep(5000);
 
         continue;
     }
-    
-        const processingJob = await jobsRepository.updateStatus(
-            job.id,
-            "PROCESSING"
-        )
     
         try {
             

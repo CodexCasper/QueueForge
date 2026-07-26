@@ -43,24 +43,6 @@ const deleteJob = async (id) => {
     });
 };
 
-const findNextPendingJob = async () =>{
-
-    return prisma.job.findFirst({
-        where: {
-            status: "PENDING",
-        },
-        orderBy: [
-             {
-            priority: "desc",
-        },
-        {
-            createdAt: "asc",
-        },
-        ],
-    });
-
-};
-
 const incrementAttempts = async (jobId) => {
     return prisma.job.update({
         where: {
@@ -74,6 +56,34 @@ const incrementAttempts = async (jobId) => {
     });
 };
 
+const claimNextJob = async () => {
+    return prisma.$transaction(async (tx) => {
+
+        const [job] = await tx.$queryRaw`
+        SELECT *
+        FROM "Job"
+        WHERE status = 'PENDING'
+        ORDER BY priority DESC, "createdAt" ASC
+        LIMIT 1
+        FOR UPDATE SKIP LOCKED
+        `;
+
+        if(!job) {
+            return null;
+        }
+
+        const claimedJob = await tx.job.update({
+            where: {
+                id: job.id,
+            },
+            data: {
+                status: "PROCESSING",
+            },
+        });
+
+        return claimedJob;
+    })
+}
 
 module.exports = {
     create,
@@ -81,6 +91,6 @@ module.exports = {
     findById,
     updateStatus,
     deleteJob,
-    findNextPendingJob,
-    incrementAttempts
+    incrementAttempts,
+    claimNextJob
 }
