@@ -1,10 +1,38 @@
 const {processJob} = require("./processor");
 const jobsRepository = require("../modules/jobs/jobs.repository");
+const workersRepository = require("../modules/workers/workers.repository");
 const sleep = require("../utils/sleep");
+
 
 const startWorker = async () => {
 
     console.log("Runnning from worker");
+
+    const worker = await workersRepository.createWorker("worker-1");
+
+    console.log(`worker ${worker.workerName} registered...`);
+
+
+    const heartbeatInterval = setInterval(() => {
+
+        await workersRepository.updateHeartbeat(worker.id);
+
+    }, 5000);
+
+
+    process.on("SIGNINT", async() => {     //process.on(eventName, callbackFunction);
+
+        console.log("Shutting down the worker....")
+
+        clearInterval(heartbeatInterval);
+
+        await workersRepository.markInactive(worker.id);
+
+        console.log("Worker marked as Inactive..");
+
+        process.exit(0);
+    })
+
 
     while(true){
 
