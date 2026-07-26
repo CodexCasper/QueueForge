@@ -44,15 +44,25 @@ const deleteDLQJob = async (id) => {
 };
 
 // replay jobs
-const replayJob = async() => {
+const replayJob = async(id) => {
 
     return prisma.$transaction(async(tx) => {
 
+        const deadLetterJob = await tx.DeadLetterJob..findUnique({
+            where: {
+                id,
+            },
+        });
+
         const 
-    })
-}
+    });
+};
+
+
 module.exports = {
     findAll,
     deleteDLQJob,
-    moveJobToDLQ
+    moveJobToDLQ,
+    replayJob,
+
 }
