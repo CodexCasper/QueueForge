@@ -1,6 +1,7 @@
 const {processJob} = require("./processor");
 const jobsRepository = require("../modules/jobs/jobs.repository");
 const workersRepository = require("../modules/workers/workers.repository");
+const dlqRepository = require("../modules/dlq/dlq.repository");
 const sleep = require("../utils/sleep");
 
 
@@ -58,6 +59,7 @@ const startWorker = async () => {
             console.log("job completed");
 
         } catch (error) {
+            
             console.error("Job Failed:", error.message);
 
             const updatedJob = await jobsRepository.incrementAttempts(
@@ -74,12 +76,12 @@ const startWorker = async () => {
                 console.log("Retrying Logic...");
             } else {
 
-                await jobsRepository.updateStatus(
-                    updatedJob.id,
-                    "FAILED"
+                await dlqRepository.moveToDLQ(
+                    updatedJob,
+                    error.message
                 );
 
-                console.log("permanently deleted");
+                console.log("Job moved to DLQ");
             }
         }
     }

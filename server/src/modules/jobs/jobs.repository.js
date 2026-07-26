@@ -35,14 +35,6 @@ const updateStatus = async(id , status) => {
 
 };
 
-const deleteJob = async (id) => {
-    return prisma.job.delete({
-        where: {
-            id,
-        },
-    });
-};
-
 const incrementAttempts = async (jobId) => {
     return prisma.job.update({
         where: {
@@ -90,7 +82,6 @@ module.exports = {
     findAll,
     findById,
     updateStatus,
-    deleteJob,
     incrementAttempts,
     claimNextJob
 }
