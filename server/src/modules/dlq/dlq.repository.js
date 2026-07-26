@@ -68,7 +68,14 @@ const replayJob = async(id) => {
                 maxAttempts: deadLetterJob.maxAttempts,
             },
         });
-        
+
+        await tx.deadLetterJob.delete({
+            
+            where: {
+                id: deadLetterJob.id,
+            },
+        });
+
     });
 };
 
