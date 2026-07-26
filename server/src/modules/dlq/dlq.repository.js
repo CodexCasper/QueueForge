@@ -43,7 +43,14 @@ const deleteDLQJob = async (id) => {
     });
 };
 
+// replay jobs
+const replayJob = async() => {
 
+    return prisma.$transaction(async(tx) => {
+
+        const 
+    })
+}
 module.exports = {
     findAll,
     deleteDLQJob,
