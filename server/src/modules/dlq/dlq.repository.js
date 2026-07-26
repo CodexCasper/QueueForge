@@ -54,7 +54,10 @@ const replayJob = async(id) => {
             },
         });
 
-        const 
+        if(!deadLetterJob) {
+            throw new Error("Dead Letter Job Not Found")
+        }
+        
     });
 };
 
