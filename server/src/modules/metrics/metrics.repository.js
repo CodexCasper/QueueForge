@@ -12,6 +12,17 @@ const getMetrics = async () => {
         },
     });
 
+    const statusCounts = {
+        pending: 0,
+        processing: 0,
+        completed: 0,
+        failed: 0
+    };
+
+    jobsByStatus.forEach((job) => {
+        statusCounts[job.status.toLowerCase()] = job._count.status;            // statusCounts["pending"] = 2;
+    });
+
 }
 
 
