@@ -43,3 +43,16 @@ model worker {
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 } 
+
+
+model DeadLetterJob {
+  id              String         @id @default(cuid())
+  originalJobId   String     
+  jobName         String
+  payload         Json
+  priority        Int
+  attempts        Int
+  maxAttempts     Int
+  failureReason   String
+  failedAt        DateTime       @default(now())
+}
