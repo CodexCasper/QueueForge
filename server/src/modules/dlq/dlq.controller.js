@@ -24,7 +24,20 @@ const deleteFailedJob = asyncHandler(async (req, res) => {
     });
 })
 
+const replayJob = asyncHandler(async(req, res) => {
+
+    const { id } = req.params;
+
+    await dlqService.replayJob(id);
+
+    res.status(200).send({
+        succes: true,
+        message: "Job Replayed Successfully",
+    });
+
+})
 module.exports = {
     deleteFailedJob,
-    getAllFailedJobs
+    getAllFailedJobs,
+    replayJob
 }

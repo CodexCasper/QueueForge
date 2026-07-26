@@ -70,7 +70,7 @@ const replayJob = async(id) => {
         });
 
         await tx.deadLetterJob.delete({
-            
+
             where: {
                 id: deadLetterJob.id,
             },
@@ -85,5 +85,4 @@ module.exports = {
     deleteDLQJob,
     moveJobToDLQ,
     replayJob,
-
 }

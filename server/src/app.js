@@ -5,7 +5,7 @@ const jobsRouter = require("./modules/jobs/jobs.routes");
 const errorHandler = require("./middleware/error.middleware")
 const dlqRoutes = require("./modules/dlq/dlq.routes");
 const workersRoutes = require("./modules/workers/workers.routes");
-
+const metricsRoutes = require("./modules/metrics/metrics.routes");
 
 const app = express();
 
@@ -17,6 +17,8 @@ app.use(express.json());
 app.use("/api/jobs" , jobsRouter);
 app.use("/api/dlq" , dlqRoutes);
 app.use("/api/workers" , workersRoutes);
+app.use("/api/metrics" , metricsRoutes);
+
 
 app.get("/" , (req,res) => {
     console.log("API is running correctly");

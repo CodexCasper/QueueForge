@@ -33,8 +33,29 @@ const markInactive = async (workerId) => {
     });
 };
 
+const findAllWorkers = async () => {
+
+    return prisma.worker.findMany({
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+};
+
+const findAllWorkerById = async () => {
+
+    return prisma.findUnique({
+        where: {
+            id,
+        },
+    });
+};
+
+
 module.exports = {
     createWorker,
     updateHeartbeat,
-    markInactive
+    markInactive,
+    findAllWorkerById,
+    findAllWorkers
 }

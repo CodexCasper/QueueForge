@@ -23,7 +23,36 @@ const getMetrics = async () => {
         statusCounts[job.status.toLowerCase()] = job._count.status;            // statusCounts["pending"] = 2;
     });
 
-}
+    const workerByStatus = await prisma.worker.groupBy({
+
+        by:["status"],
+        _count: {
+            status: "true",
+        },
+    });
+
+    const workerCounts = {
+        active:0,
+        inactive:0,
+    };
+
+    workerByStatus.forEach((worker) => {
+        workerCounts[worker.status.toLowerCase()] = worker._count.status;
+    })
+
+    const totalDlqJobs = await primsa.DeadLetterJob.count();
+
+    return {
+        jobs: {
+            total: totalJobs,
+            ...jobsByStatus
+        },
+        workers: workerCounts,
+        dlq: {
+            total: totalDlqJobs,
+        },
+    };
+};
 
 
 module.exports = {
