@@ -43,39 +43,35 @@ const deleteDLQJob = async (id) => {
     });
 };
 
+const findById = async (id) => {
+    return prisma.deadLetterJob.findUnique({
+        where: {
+            id,
+        },
+    });
+};
+
 // replay jobs
-const replayJob = async(id) => {
+const replayJob = async (deadLetterJob) => {
 
-    return prisma.$transaction(async(tx) => {
-
-        const deadLetterJob = await tx.DeadLetterJob.findUnique({
-            where: {
-                id,
-            },
-        });
-
-        if(!deadLetterJob) {
-            throw new Error("Dead Letter Job Not Found")
-        }
+    return prisma.$transaction(async (tx) => {
 
         await tx.job.create({
             data: {
                 jobName: deadLetterJob.jobName,
                 payload: deadLetterJob.payload,
-                status:"PENDING",
+                status: "PENDING",
                 priority: deadLetterJob.priority,
-                attemtps: 0,
+                attempts: 0,
                 maxAttempts: deadLetterJob.maxAttempts,
             },
         });
 
         await tx.deadLetterJob.delete({
-
             where: {
                 id: deadLetterJob.id,
             },
         });
-
     });
 };
 
@@ -85,4 +81,5 @@ module.exports = {
     deleteDLQJob,
     moveJobToDLQ,
     replayJob,
+    findById
 }

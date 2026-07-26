@@ -6,6 +6,7 @@ const processJob = async(job) => {
         setTimeout(resolve , 3000);
     })
 
+    throw new Error("pta nhai");
     
     console.log("Job Finished");
 } 

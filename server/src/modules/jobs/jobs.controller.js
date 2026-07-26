@@ -49,22 +49,9 @@ const updateJobStatus = asyncHandler(async(req , res) => {
 
 })
 
-const deleteJob = asyncHandler(async(req, res) => {
-
-    const job = await jobsService.deleteJob(req.params.id);
-
-    res.json({
-        success: true,
-        message: "Job Deleted Successfully",
-        data: job
-    });
-
-});
-
 module.exports = {
     createJob,
     getAllJobs,
     getJobById,
     updateJobStatus,
-    deleteJob
 }

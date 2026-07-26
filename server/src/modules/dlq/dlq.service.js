@@ -8,15 +8,20 @@ const getAllFailedJobs = async () => {
 
 const deleteFailedJob = async (id) => {
     
-    return await dlqRepository.deleteDLQJob();
+    return await dlqRepository.deleteDLQJob(id);
 
 }
 
 const replayJob = async (id) => {
 
-    return await dlqRepository.replayJob(id);
+    const deadLetterJob = await dlqRepository.findById(id);
 
-}
+    if (!deadLetterJob) {
+        throw new Error("Dead Letter Job Not Found");
+    }
+
+    return dlqRepository.replayJob(deadLetterJob);
+};
 
 module.exports = {
     getAllFailedJobs,

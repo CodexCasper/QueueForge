@@ -11,6 +11,5 @@ router.get("/:id" , jobsController.getJobById);
 
 router.patch("/:id/status" , jobsController.updateJobStatus);
 
-router.delete("/:id" , jobsController.deleteJob);
 
 module.exports = router;

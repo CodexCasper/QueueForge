@@ -38,21 +38,9 @@ const updateJobStatus = async (id,body) => {
     return jobsRepository.updateStatus(id , status);
 }
 
-const deleteJob = async(id) => {
-    
-    const job = await jobsRepository.findById(id);
-
-    if(!job){
-        throw new error("Job Not Found");
-    }
-
-    return jobsRepository.deleteJob(id);
-}
-
 module.exports ={
     createJob,
     getAllJobs,
     getJobById,
     updateJobStatus,
-    deleteJob
 }

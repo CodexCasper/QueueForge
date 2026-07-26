@@ -42,9 +42,9 @@ const findAllWorkers = async () => {
     });
 };
 
-const findAllWorkerById = async () => {
+const findAllWorkerById = async (id) => {
 
-    return prisma.findUnique({
+    return prisma.worker.findUnique({
         where: {
             id,
         },

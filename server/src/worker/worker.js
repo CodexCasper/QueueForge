@@ -9,9 +9,10 @@ const startWorker = async () => {
 
     console.log("Runnning from worker");
 
-    const worker = await workersRepository.createWorker("worker-1");
+    const workerName = `worker-${Date.now()}`;
+    const worker = await workersRepository.createWorker(workerName);
 
-    console.log(`worker ${worker.workerName} registered...`);
+    console.log(`${worker.workerName} registered...`);
 
 
     const heartbeatInterval = setInterval(() => {
@@ -76,7 +77,7 @@ const startWorker = async () => {
                 console.log("Retrying Logic...");
             } else {
 
-                await dlqRepository.moveToDLQ(
+                await dlqRepository.moveJobToDLQ(
                     updatedJob,
                     error.message
                 );
