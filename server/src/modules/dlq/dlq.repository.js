@@ -1,13 +1,5 @@
 const prisma = require("../../config/prisma");
 
-const findAll = async () => {
-
-}
-
-const deleteDLQJob = async () => {
-
-}
-
 const moveJobToDLQ = async (job , failureReason) => {
 
     return prisma.$transaction(async (tx) => {
@@ -33,7 +25,27 @@ const moveJobToDLQ = async (job , failureReason) => {
     });
 }
 
+const findAll = async () => {
+
+    return prisma.DeadLetterJob.findMany({
+        orderBy: {
+            failedAt: "desc",
+        },
+    });
+};
+
+const deleteDLQJob = async (id) => {
+
+    return prisma.DeadLetterJob.delete({
+        where: {
+            id,
+        },
+    });
+};
+
+
 module.exports = {
     findAll,
-    deleteDLQJob
+    deleteDLQJob,
+    moveJobToDLQ
 }
