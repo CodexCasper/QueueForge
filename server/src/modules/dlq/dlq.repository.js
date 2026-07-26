@@ -48,7 +48,7 @@ const replayJob = async(id) => {
 
     return prisma.$transaction(async(tx) => {
 
-        const deadLetterJob = await tx.DeadLetterJob..findUnique({
+        const deadLetterJob = await tx.DeadLetterJob.findUnique({
             where: {
                 id,
             },
@@ -57,6 +57,17 @@ const replayJob = async(id) => {
         if(!deadLetterJob) {
             throw new Error("Dead Letter Job Not Found")
         }
+
+        await tx.job.create({
+            data: {
+                jobName: deadLetterJob.jobName,
+                payload: deadLetterJob.payload,
+                status:"PENDING",
+                priority: deadLetterJob.priority,
+                attemtps: 0,
+                maxAttempts: deadLetterJob.maxAttempts,
+            },
+        });
         
     });
 };
