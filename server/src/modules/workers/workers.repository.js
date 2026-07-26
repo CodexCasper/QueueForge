@@ -13,10 +13,10 @@ const updateHeartbeat = async (workerId) => {
 
     return prisma.worker.update({
         where: {
-            id: workerId.id,
+            id: workerId,
         },
         data: {
-            lastHeartbeat: new Date(),
+            lastHeartBeat: new Date(),
         },
     });
 };

@@ -16,7 +16,7 @@ const startWorker = async () => {
 
     const heartbeatInterval = setInterval(() => {
 
-        await workersRepository.updateHeartbeat(worker.id);
+        return workersRepository.updateHeartbeat(worker.id);
 
     }, 5000);
 

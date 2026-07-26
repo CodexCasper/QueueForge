@@ -1,4 +1,4 @@
-const dlqRepository = requirte("./dlq.repository");
+const dlqRepository = require("./dlq.repository");
 
 const getAllFailedJobs = async () => {
 

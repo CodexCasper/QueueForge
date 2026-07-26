@@ -2,13 +2,13 @@ const prisma = require("../../config/prisma");
 
 const getMetrics = async () => {
 
-    const totalJobs = await primsa.job.count();
+    const totalJobs = await prisma.job.count();
 
     const jobsByStatus = await prisma.job.groupBy({
 
-        by:["status"],
+        by: ["status"],
         _count: {
-            status: "true",
+            status: true,
         },
     });
 
@@ -27,7 +27,7 @@ const getMetrics = async () => {
 
         by:["status"],
         _count: {
-            status: "true",
+            status: true,
         },
     });
 
@@ -40,12 +40,12 @@ const getMetrics = async () => {
         workerCounts[worker.status.toLowerCase()] = worker._count.status;
     })
 
-    const totalDlqJobs = await primsa.DeadLetterJob.count();
+    const totalDlqJobs = await prisma.DeadLetterJob.count();
 
     return {
         jobs: {
             total: totalJobs,
-            ...jobsByStatus
+            ...statusCounts
         },
         workers: workerCounts,
         dlq: {
