@@ -12,7 +12,14 @@ const deleteFailedJob = async (id) => {
 
 }
 
+const replayJob = async (id) => {
+
+    return await dlqRepository.replayJob(id);
+
+}
+
 module.exports = {
     getAllFailedJobs,
-    deleteFailedJob
+    deleteFailedJob,
+    replayJob
 }
