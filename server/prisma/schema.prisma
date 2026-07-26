@@ -18,6 +18,11 @@ enum JobStatus {
   PROCESSING
 }
 
+enum Workerstatus {
+  ACTIVE
+  INACTIVE
+}
+
 model Job {
   id            String           @id @default(cuid())
   jobName       String
@@ -29,3 +34,12 @@ model Job {
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
 }
+
+model worker {
+  id                String           @id @default(cuid())
+  workerName        String
+  status            Workerstatus     @default(ACTIVE)
+  lastHeartBeat     DateTime         @default(now())
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+} 
