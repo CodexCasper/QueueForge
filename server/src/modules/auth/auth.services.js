@@ -8,7 +8,7 @@ const register = async ({ name , email , password }) => {
     const existingUser = await authRepository.findByEmail(email);
 
     if(existingUser) {
-        throw new Error("User Already Exists");
+        throw new ApiError(409,"User Already Exists");
     }
 
     const hashedPassword = await bcrypt.hash(password , 10);
@@ -48,13 +48,13 @@ const login = async ({ email , password }) => {
     const user = await authRepository.findByEmail(email);
 
     if(!user) {
-        throw new Error("Invalid email or password");
+        throw new Error(401,"Invalid email or password");
     }
 
     const isPasswordValid = await bcrypt.compare(password , user.password);
 
     if(!isPasswordValid) {
-        throw new error("Invalid email or Password");
+        throw new error(401,"Invalid email or Password");
     }
 
     const payload =  {
@@ -83,13 +83,19 @@ const login = async ({ email , password }) => {
 
 
 const refreshAccessToken = async (refreshToken) => {
+    try {
+        
+        const decoded = verifyRefreshToken(refreshToken);
+    } catch (error) {
+
+        throw new ApiError(401, "Invalid or expired refresh token");
+    }
     
-    const decoded = verifyRefreshToken(refreshToken);
 
     const user = await authRepository.findById(decoded.id);
 
     if (!user || user.refreshToken !== refreshToken) {
-        throw new Error("refresh token Invalid");
+        throw new ApiError(401,"refresh token Invalid");
     }
 
     const payload = {
@@ -108,6 +114,13 @@ const refreshAccessToken = async (refreshToken) => {
 
 
 const logout = async (userId) => {
+
+    const user = await authRepository.findById(userId);
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
     await authRepository.updateRefreshToken(userId, null);
 
     return {
@@ -121,6 +134,10 @@ const logout = async (userId) => {
 const getProfile = async (userId) => {
     
     const user = await authRepository.findById(userId);
+
+    if(!user) {
+        throw new ApiError(404, "User not found");
+    }
 
     return {
         id: user.id,
@@ -136,6 +153,12 @@ const getProfile = async (userId) => {
 
 
 const updateUserProfile = async (userId,data) => {
+
+    const user = await authRepository.findById(userId);
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
 
     const updatedUser = await authRepository.updateProfile(
         userId,
@@ -158,7 +181,7 @@ const changePassword = async (userId , currentPassword , newPassword) => {
     const user = await authRepository.findById(userId);
 
     if(!user) {
-        throw new Error("user not found");
+        throw new ApiError("user not found");
         
     }
 
@@ -169,7 +192,7 @@ const changePassword = async (userId , currentPassword , newPassword) => {
 
 
     if (!isPasswordValid) {
-        throw new Error("Current password is incorrect");
+        throw new ApiError("Current password is incorrect");
     }
 
     const hashedPassword = await bcrypt.hash(newPassword , 10);
