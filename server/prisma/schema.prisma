@@ -23,6 +23,11 @@ enum Workerstatus {
   INACTIVE
 }
 
+enum Role {
+  DEVELOPER
+  ADMIN
+}
+
 model Job {
   id            String           @id @default(cuid())
   jobName       String
@@ -55,4 +60,15 @@ model DeadLetterJob {
   maxAttempts     Int
   failureReason   String
   failedAt        DateTime       @default(now())
+}
+
+model User {
+  id              String         @id @default(uuid())
+  name            String
+  email           String         @unique
+  password        String
+  role            Role           @default(DEVELOPER)
+  refreshToken    String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 }
