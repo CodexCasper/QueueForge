@@ -10,7 +10,7 @@ const create = async (userData) => {
 
 const findByEmail = async (email) => {
 
-    return prisma.User.findUnique({
+    return prisma.user.findUnique({
         where: {
             email,
         },
@@ -30,7 +30,7 @@ const findById = async (id) => {
 
 const updateRefreshToken = async (id , refreshToken) => {
     
-    return prisma.User.update({
+    return prisma.user.update({
         where: {
             id,
         }, 
@@ -71,5 +71,6 @@ module.exports = {
     findByEmail,
     findById,
     updatePassword,
-    updateProfile
+    updateProfile,
+    updateRefreshToken
 }

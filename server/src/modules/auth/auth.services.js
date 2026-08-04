@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const authRepository = require("./auth.repository");
+const ApiError = require("../../utils/ApiError");
 
 const { generateAccessToken , generateRefreshToken , verifyRefreshToken , verifyAccessToken } = require("../../config/jwt");
 

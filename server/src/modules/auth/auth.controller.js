@@ -36,7 +36,7 @@ const register = asyncHandler(async( req ,res) => {
 
 const login = asyncHandler(async(req, res) => {
 
-    const validatedData = await loginSchema.pars(req.body);
+    const validatedData = await loginSchema.parse(req.body);
 
     const result = await authService.login(validatedData);
 
