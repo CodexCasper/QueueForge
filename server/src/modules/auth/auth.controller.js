@@ -96,6 +96,8 @@ const getProfile = asyncHandler(async(req,res) => {
 
     const user = await authService.getProfile(req.user.id);
 
+    console.log(req.user);
+    
     return res.status(200).json({
         success: true,
         data: user,
@@ -129,7 +131,7 @@ const changePassword = asyncHandler(async(req ,res) => {
 
     res.clearCookie("refreshToken" , {
         httpOnly: true,
-        secure: procss.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === "production",
         samesite: "strict",
     });
 

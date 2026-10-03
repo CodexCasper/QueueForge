@@ -7,6 +7,8 @@ const dlqRoutes = require("./modules/dlq/dlq.routes");
 const workersRoutes = require("./modules/workers/workers.routes");
 const metricsRoutes = require("./modules/metrics/metrics.routes");
 const authRoutes = require("./modules/auth/auth.routes");
+const userRoutes = require("./modules/users/user.routes");
+
 
 const errorHandler = require("./middleware/error.middleware")
 
@@ -22,7 +24,7 @@ app.use("/api/dlq" , dlqRoutes);
 app.use("/api/workers" , workersRoutes);
 app.use("/api/metrics" , metricsRoutes);
 app.use("/api/auth" , authRoutes);
-
+app.use("/api/users" , userRoutes);
 
 app.use(errorHandler);
 

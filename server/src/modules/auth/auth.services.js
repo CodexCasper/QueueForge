@@ -47,7 +47,7 @@ const register = async ({ name , email , password }) => {
 const login = async ({ email , password }) => {
     
     const user = await authRepository.findByEmail(email);
-
+    
     if(!user) {
         throw new Error(401,"Invalid email or password");
     }
@@ -55,7 +55,7 @@ const login = async ({ email , password }) => {
     const isPasswordValid = await bcrypt.compare(password , user.password);
 
     if(!isPasswordValid) {
-        throw new error(401,"Invalid email or Password");
+        throw new ApiError(401,"Invalid email or Password");
     }
 
     const payload =  {
@@ -63,8 +63,9 @@ const login = async ({ email , password }) => {
         role: user.role
     }
 
-    const accessToken = await authRepository.generateAccessToken(payload);
-    const refreshToken = await authRepository.generateRefreshToken(payload);
+    const accessToken = await generateAccessToken(payload);
+  
+    const refreshToken = await generateRefreshToken(payload);
 
     await authRepository.updateRefreshToken(user.id , refreshToken);
 
@@ -84,9 +85,11 @@ const login = async ({ email , password }) => {
 
 
 const refreshAccessToken = async (refreshToken) => {
+
+    let decoded;
     try {
         
-        const decoded = verifyRefreshToken(refreshToken);
+        decoded = verifyRefreshToken(refreshToken);
     } catch (error) {
 
         throw new ApiError(401, "Invalid or expired refresh token");
@@ -168,7 +171,7 @@ const updateUserProfile = async (userId,data) => {
 
     return {
         id: updatedUser.id,
-        name: updatedUser.id,
+        name: updatedUser.name,
         email: updatedUser.email,
         role: updatedUser.role,
     };
@@ -182,7 +185,7 @@ const changePassword = async (userId , currentPassword , newPassword) => {
     const user = await authRepository.findById(userId);
 
     if(!user) {
-        throw new ApiError("user not found");
+        throw new ApiError(401,"user not found");
         
     }
 
@@ -191,9 +194,8 @@ const changePassword = async (userId , currentPassword , newPassword) => {
         user.password
     );
 
-
     if (!isPasswordValid) {
-        throw new ApiError("Current password is incorrect");
+        throw new ApiError(401,"Current password is incorrect");
     }
 
     const hashedPassword = await bcrypt.hash(newPassword , 10);

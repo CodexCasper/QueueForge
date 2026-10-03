@@ -16,7 +16,7 @@ router.post("/logout" ,authenticate, authController.logout);
 
 router.get("/profile" ,authenticate, authController.getProfile);
 
-router.patch("/profile" , authenticate, authController.updateProfile);
+router.patch("/Updateprofile" , authenticate, authController.updateProfile);
 
 router.patch("/change-password" , authenticate, authController.changePassword);
 

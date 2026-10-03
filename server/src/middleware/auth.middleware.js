@@ -4,7 +4,7 @@ const ApiError = require("../utils/ApiError");
 const authenticate = (req , res , next) => {
 
     const authHeader = req.headers.authorization;
-
+    
     if(!authHeader || !authHeader.startsWith("Bearer ")) {
         return next(
             new ApiError(401 , "Access Token required")
@@ -16,15 +16,15 @@ const authenticate = (req , res , next) => {
     try {
         
         const decoded = verifyAccessToken(token);
-
+        console.log("Decoded:", decoded);
         req.user = {
             id: decoded.id,
-            role: decoded.id,
+            role: decoded.role,
         };
 
         next();
     } catch (error) {
-        
+        console.log(error);
         next(
             new ApiError(401 ,"Invalid or expired Access Token")
         );

@@ -1,76 +1,76 @@
-const prisma = require("../../config/prisma");
+    const prisma = require("../../config/prisma");
 
-const create = async (userData) => {
+    const create = async (userData) => {
 
-    return prisma.User.create({
-        data: userData,
-    });
+        return prisma.user.create({
+            data: userData,
+        });
 
-};
+    };
 
-const findByEmail = async (email) => {
+    const findByEmail = async (email) => {
 
-    return prisma.user.findUnique({
-        where: {
-            email,
-        },
-    });
+        return prisma.user.findUnique({
+            where: {
+                email,
+            },
+        });
 
-};
+    };
 
-const findById = async (id) => {
-    
-    return prisma.User.findUnique({
-        where: {
-            id,
-        },
-    });
+    const findById = async (id) => {
+        
+        return prisma.user.findUnique({
+            where: {
+                id,
+            },
+        });
 
-};
+    };
 
-const updateRefreshToken = async (id , refreshToken) => {
-    
-    return prisma.user.update({
-        where: {
-            id,
-        }, 
-        data: {
-            refreshToken
-        },
-    });
+    const updateRefreshToken = async (id , refreshToken) => {
+        
+        return prisma.user.update({
+            where: {
+                id,
+            }, 
+            data: {
+                refreshToken
+            },
+        });
 
-};
+    };
 
-const updateProfile = async (id , data) => {
-    
-    return prisma.User.update({
-        where: {
-            id,
-        },
-        data,
-    });
+    const updateProfile = async (id , data) => {
+        
+        return prisma.user.update({
+            where: {
+                id,
+            },
+            data,
+        });
 
-};
+    };
 
-const updatePassword = async (id , password) => {
-    
-    return prisma.User.update({
-        where: {
-            id,
-        },
-        data: {
-            password
-        },
-    });
+    const updatePassword = async (id , password) => {
+        
+        return prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                password
+            },
+        });
 
-};
+    };
 
 
-module.exports = {
-    create,
-    findByEmail,
-    findById,
-    updatePassword,
-    updateProfile,
-    updateRefreshToken
-}
+    module.exports = {
+        create,
+        findByEmail,
+        findById,
+        updatePassword,
+        updateProfile,
+        updateRefreshToken
+    }
