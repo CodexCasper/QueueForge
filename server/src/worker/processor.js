@@ -18,10 +18,23 @@ const processJob = async(job) => {
         setTimeout(resolve , 3000);
     })
 
+    const payload = job.payload ?? {};
+
     //delibrately fail jobs when testing retry behaviour
-    if (job.payload?.simulateFailure === true) {
+    if (payload.simulateFailure === true) {
         throw new Error("simulated job failure for retry testing");
         
+    }
+
+    // Scenario 2: The job fails a specified number of times,
+    // then succeeds on a later execution.
+    if (
+        Number.isInteger(payload.failUntilAttempt) &&
+        payload.failUntilAttempt > job.attempts
+    ) {
+        throw new Error(
+            `Simulated temporary failure. Previous failures: ${job.attempts}`
+        );
     }
 
     console.log(`Job Finished: ${job.jobName} (Id: ${job.id})`);
